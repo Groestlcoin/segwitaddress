@@ -513,7 +513,7 @@ video: document.getElementById("qrcam")
 });
 
 qr.addListener('scan', function(data){
-    document.getElementById("toaddress").value = data;
+    document.getElementById("toaddress").value = data.replace("groestlcoin:", "");
     if(document.getElementById("toaddress").value.length > 20){
         qr.stop();
          $("#qrcam").css("display","none");
