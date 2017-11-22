@@ -55,8 +55,8 @@
 </head>
 <body>
   <h1>Groestlcoin SegWit Paper Wallet</h1><br>
-  <div class="well">Segwitaddress.org is an <a href="https://github.com/Groestlcoin/segwitaddress"><span class="label label-primary">OPEN SOURCE</span></a> bitcoin paper wallet generator that utilizes Segregated Witness (SegWit) Pay To Witness Public Key Hash (P2WPKH) addresses and transactions. Segwitaddress.org uses the <a href="https://github.com/bitcoinjs/bitcoinjs-lib"><span class="label label-success">BitcoinJS</span></a> library and was initially built from BIP32JP's SegWit repo (<a href="https://github.com/bip32JP/bip32JP.github.io/tree/master/segwit">https://github.com/bip32JP/bip32JP.github.io/tree/master/segwit</a>).</div> 
-    <br>
+  <div class="well">This is an <a href="https://github.com/Groestlcoin/segwitaddress"><span class="label label-primary">OPEN SOURCE</span></a> Groestlcoin paper wallet generator that utilizes Segregated Witness (SegWit) Pay To Witness Public Key Hash (P2WPKH) addresses and transactions.</div> 
+  <br>
     <a href="#entropyRef"><button id="entropyRef" onClick="return btnCreate();"  class="btn btn-primary">Generate New SegWit Address</button></a><br>
     
     
@@ -96,7 +96,7 @@
     <button class="btn btn-default" onClick="return turnOnWC2();">SCAN WITH WEBCAM</button><span id="qrnotify2" class="label label-success">QR CODE SCANNED</span>
     <br>
     <textarea id="inputdata" cols="100" rows="7"></textarea>
-    <input type="number" class="form-control input-lg" id="satperbyte"> <small>Miner Fee Satoshis Per Byte</small><br><br>
+    <input type="number" class="form-control input-lg" id="satperbyte"> <small>Miner Fee Per Byte</small><br><br>
     <button class="btn btn-success" id="sweepkey">TRANSFER ALL FUNDS</button><br>
     </div>
     <div id="results"></div>
@@ -327,7 +327,7 @@ function sweepKey() {
         try {
           var toAddressObj = bitcoin.address.fromBase58Check(toAddress)
         } catch(e) {
-          alert("To Address was not a valid Bitcoin address!")
+          alert("To Address was not a valid Groestlcoin address!")
           return
         }
       }
