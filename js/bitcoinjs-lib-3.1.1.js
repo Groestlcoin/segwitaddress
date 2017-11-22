@@ -8474,9 +8474,18 @@ function sha256x2 (buffer) {
   return createHash('sha256').update(tmp).digest()
 }
 
+// SHA256(buffer)
+function sha256 (buffer) {
+  return createHash('sha256').update(buffer).digest()
+}
+
+function groestl(buffer) {
+  return Buffer.from(Module.ccall('GroestlCoinHash', 'string', ['string'], [buffer.toString("hex")]), "hex");  
+}
+
 // Encode a buffer as a base58-check encoded string
 function encode (payload) {
-  var checksum = sha256x2(payload)
+  var checksum = groestl(payload)
 
   return base58.encode(Buffer.concat([
     payload,
@@ -8487,7 +8496,7 @@ function encode (payload) {
 function decodeRaw (buffer) {
   var payload = buffer.slice(0, -4)
   var checksum = buffer.slice(-4)
-  var newChecksum = sha256x2(payload)
+  var newChecksum = groestl(payload)
 
   if (checksum[0] ^ newChecksum[0] |
       checksum[1] ^ newChecksum[1] |
@@ -12411,17 +12420,17 @@ module.exports = HDNode
 
 module.exports = {
   bitcoin: {
-    messagePrefix: '\x18Bitcoin Signed Message:\n',
+    messagePrefix: '\x18GroestlCoin Signed Message:\n',
     bip32: {
       public: 0x0488b21e,
       private: 0x0488ade4
     },
-    pubKeyHash: 0x00,
+    pubKeyHash: 0x24,
     scriptHash: 0x05,
     wif: 0x80
   },
   testnet: {
-    messagePrefix: '\x18Bitcoin Signed Message:\n',
+    messagePrefix: '\x18GroestlCoin Signed Message:\n',
     bip32: {
       public: 0x043587cf,
       private: 0x04358394
@@ -12430,16 +12439,6 @@ module.exports = {
     scriptHash: 0xc4,
     wif: 0xef
   },
-  litecoin: {
-    messagePrefix: '\x19Litecoin Signed Message:\n',
-    bip32: {
-      public: 0x019da462,
-      private: 0x019d9cfe
-    },
-    pubKeyHash: 0x30,
-    scriptHash: 0x32,
-    wif: 0xb0
-  }
 }
 
 },{}],93:[function(require,module,exports){
@@ -13719,7 +13718,7 @@ Transaction.prototype.hashForSignature = function (inIndex, prevOutScript, hashT
   buffer.writeInt32LE(hashType, buffer.length - 4)
   txTmp.__toBuffer(buffer, 0, false)
 
-  return bcrypto.hash256(buffer)
+  return bcrypto.sha256(buffer)
 }
 
 Transaction.prototype.hashForWitnessV0 = function (inIndex, prevOutScript, value, hashType) {
@@ -13748,7 +13747,7 @@ Transaction.prototype.hashForWitnessV0 = function (inIndex, prevOutScript, value
       writeUInt32(txIn.index)
     })
 
-    hashPrevouts = bcrypto.hash256(tbuffer)
+    hashPrevouts = bcrypto.sha256(tbuffer)
   }
 
   if (!(hashType & Transaction.SIGHASH_ANYONECANPAY) &&
@@ -13761,7 +13760,7 @@ Transaction.prototype.hashForWitnessV0 = function (inIndex, prevOutScript, value
       writeUInt32(txIn.sequence)
     })
 
-    hashSequence = bcrypto.hash256(tbuffer)
+    hashSequence = bcrypto.sha256(tbuffer)
   }
 
   if ((hashType & 0x1f) !== Transaction.SIGHASH_SINGLE &&
@@ -13778,7 +13777,7 @@ Transaction.prototype.hashForWitnessV0 = function (inIndex, prevOutScript, value
       writeVarSlice(out.script)
     })
 
-    hashOutputs = bcrypto.hash256(tbuffer)
+    hashOutputs = bcrypto.sha256(tbuffer)
   } else if ((hashType & 0x1f) === Transaction.SIGHASH_SINGLE && inIndex < this.outs.length) {
     var output = this.outs[inIndex]
 
@@ -13787,7 +13786,7 @@ Transaction.prototype.hashForWitnessV0 = function (inIndex, prevOutScript, value
     writeUInt64(output.value)
     writeVarSlice(output.script)
 
-    hashOutputs = bcrypto.hash256(tbuffer)
+    hashOutputs = bcrypto.sha256(tbuffer)
   }
 
   tbuffer = Buffer.allocUnsafe(156 + varSliceSize(prevOutScript))
@@ -13805,11 +13804,11 @@ Transaction.prototype.hashForWitnessV0 = function (inIndex, prevOutScript, value
   writeSlice(hashOutputs)
   writeUInt32(this.locktime)
   writeUInt32(hashType)
-  return bcrypto.hash256(tbuffer)
+  return bcrypto.sha256(tbuffer)
 }
 
 Transaction.prototype.getHash = function () {
-  return bcrypto.hash256(this.__toBuffer(undefined, undefined, false))
+  return bcrypto.sha256(this.__toBuffer(undefined, undefined, false))
 }
 
 Transaction.prototype.getId = function () {

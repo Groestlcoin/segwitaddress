@@ -3,9 +3,9 @@
 <html>
     
 <head>
-    <title>SegWit Paper Wallet</title>
+    <title>Groestlcoin SegWit Paper Wallet</title>
     <meta name="description" content="Create Segregated Witness (SegWit) Addresses in your browser that can be ran offline to create paper wallets or bulk addresses.">
-    <meta name="keywords" content="Bitcoin, SegWit Paper, SegWit Address, P2WPKH generator, P2WPKH wallet, javascript, pay to witness">
+    <meta name="keywords" content="Groestlcoin, SegWit Paper, SegWit Address, P2WPKH generator, P2WPKH wallet, javascript, pay to witness">
 
 <style>
     body, html {
@@ -40,9 +40,9 @@
     <script src="js/instascan.min.js"></script>
 </head>
 <body>
-  <h1>SegWit Paper Wallet</h1><br>
+  <h1>Groestlcoin SegWit Paper Wallet</h1><br>
   <div class="alert alert-dismissible alert-info">
-      This site is <strong>Open Source</strong> and runs on just JavaScript and HTML. That means you can <a href="https://github.com/coinables/segwitaddress">download it</a> and run it on your own machine. This allows you to generate SegWit addresses offline, only the sweep feature requires an internet connection. 
+      This site is <strong>Open Source</strong> and runs on just JavaScript and HTML. That means you can <a href="https://github.com/Groestlcoin/segwitaddress">download it</a> and run it on your own machine. This allows you to generate SegWit addresses offline, only the sweep feature requires an internet connection. 
   </div>    
   <div class="well">This is a simple bitcoin paper wallet generator that utilizes Segregated Witness (SegWit) Pay To Witness Public Key Hash (P2WPKH) addresses and transactions. This repo uses the <a href="https://github.com/bitcoinjs/bitcoinjs-lib"><span class="label label-success">BitcoinJS</span></a> library and is HEAVILY based on BIP32JP's SegWit repo (<a href="https://github.com/bip32JP/bip32JP.github.io/tree/master/segwit">https://github.com/bip32JP/bip32JP.github.io/tree/master/segwit</a>).</div> 
     <br>
@@ -89,15 +89,16 @@
     <h3>Vanity SegWit Address</h3>
     <p>NOTE: This is mostly a novelty, it's a very slow generator.</p>
     <p>Max Attempts: <input type="number" id="maxattempts" value="10000"><small>10,000 attempts will take about 2-3 minutes to generate.</small></p>
-    <p>Phrase to match: <input type="text" id="vanityPhrase" placeholder="btc"> <small>not case sensitive</small></p>
+    <p>Phrase to match: <input type="text" id="vanityPhrase" placeholder="grs"> <small>not case sensitive</small></p>
     <button id="vanityBtn">Start Searching</button>
     
     <div id="vanityOut"></div>
     <br><br>
     
     <a href="https://bitcoincore.org/en/segwit_adoption/"><span class="label label-default"><span id="wit">SEG</span>WIT</span></a>
-    <a href="https://github.com/coinables/segwitaddress"><span class="label label-primary">OPEN SOURCE</span></a>
+    <a href="https://github.com/Groestlcoin/segwitaddress"><span class="label label-primary">OPEN SOURCE</span></a>
     <a href="https://github.com/bitcoinjs/bitcoinjs-lib"><span class="label label-success">BITCOINJS</span></a>
+ <script type="text/javascript" src="js/grs.js"></script>
  <script src="js/bitcoinjs-lib-3.1.1.js"></script>
  <script type="text/javascript" src="js/qrcode.js"></script>
   
@@ -189,8 +190,8 @@
 function sweepKey() {
      var DOUBLE_TX = false
      var NETWORK = bitcoin.networks.bitcoin
-     var API_DOMAIN = "https://api.smartbit.com.au"
-     var EXPLORER_DOMAIN = "https://www.smartbit.com.au"
+     var API_DOMAIN = "https://chainz.cryptoid.info/grs/api.dws?key=d47da926b82e"
+     var EXPLORER_DOMAIN = "https://chainz.cryptoid.info/grs/"
      var Buffer = null
    
      var WIF = $("#wifprivatekey").val();
@@ -216,17 +217,20 @@ function sweepKey() {
    
      console.log(P2SHAddress);
       var data
+
       $.ajax({
         async: true,
         type: "GET",
-        url: API_DOMAIN + "/v1/blockchain/address/" + P2SHAddress + "/unspent",
+        url: API_DOMAIN + "&q=unspent&active=" + P2SHAddress,
+        dataType: "json",
+        crossDomain: true,
         success: function(result) {
-          console.log(result.unspent.length + " utxos found");
-          data = result.unspent.map(function(item){
+          console.log(result.unspent_outputs.length + " utxos found");
+          data = result.unspent_outputs.map(function(item){
             return {
-              "txid": item.txid,
-              "vout": item.n,
-              "satoshis": item.value_int
+              "txid": item.tx_hash,
+              "vout": item.tx_ouput_n,
+              "satoshis": item.value*1
             }
           })
           $("#inputdata").val(JSON.stringify(data, null, 2))
@@ -343,10 +347,10 @@ function sweepKey() {
           $.ajax({
             async: true,
             type: "POST",
-            url: API_DOMAIN + "/v1/blockchain/pushtx",
-            contentType: 'application/json',
-            dataType: "json",
-            data: JSON.stringify({hex: tx2_raw}),
+            url: API_DOMAIN + "q=pushtx",
+            //contentType: 'application/json',
+            dataType: "textjson",
+            data: tx2_raw, //JSON.stringify({hex: tx2_raw}),
             success: function(result) {
               console.log("Transaction #2 sent!");
             }
@@ -356,16 +360,25 @@ function sweepKey() {
       $.ajax({
         async: true,
         type: "POST",
-        url: API_DOMAIN + "/v1/blockchain/pushtx",
-        contentType: 'application/json',
-        dataType: "json",
-        data: JSON.stringify({hex: tx_raw}),
+       // url: API_DOMAIN + "q=pushtx",
+        //contentType: 'text',
+        //dataType: "text",
+        //data: tx_raw, //JSON.stringify({hex: tx_raw}),
+            url: "http://groestlsight.groestlcoin.org/api/tx/send",//+coinjs.apikey,
+            data: "rawtx="+tx_raw,
+            dataType: "json",
         success: function(result) {
           console.log("Transaction sent!");
-        }
+        },
+        error: function(data, status, error) {
+                var obj = data.responseText;
+                var r = ' ';
+                r += (data.responseText.length) ? data.responseText : '';
+                r = (r!=' ') ? r : ' Failed to broadcast'; // build response
+            }
       });
       $("#results").html(
-        "Transaction ID:<br><a href=\"" + EXPLORER_DOMAIN + "/tx/" + tx_txid + "\" target=\"_blank\">" +
+        "Transaction ID:<br><a href=\"" + EXPLORER_DOMAIN + "tx.dws?" + tx_txid + "\" target=\"_blank\">" +
         tx_txid + "</a><br>" +
         "Raw Transaction:<br><textarea cols=\"150\" rows=\"10\">" +
         tx_raw + "</textarea>" +
