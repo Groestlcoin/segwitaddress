@@ -258,6 +258,7 @@ function sweepKey() {
      var DOUBLE_TX = false
      var NETWORK = bitcoin.networks.bitcoin
      var API_DOMAIN = "https://chainz.cryptoid.info/grs/api.dws?key=d47da926b82e"
+     var API_DOMAIN2= "https://groestlsight.groestlcoin.org",
      var EXPLORER_DOMAIN = "https://chainz.cryptoid.info/grs/"
      var Buffer = null
    
@@ -409,10 +410,9 @@ function sweepKey() {
           $.ajax({
             async: true,
             type: "POST",
-            url: API_DOMAIN + "q=pushtx",
-            //contentType: 'application/json',
-            dataType: "textjson",
-            data: tx2_raw, //JSON.stringify({hex: tx2_raw}),
+            url: API_DOMAIN2 + "/api/tx/send",
+            data: "rawtx="+tx2_raw,
+            dataType: "json",
             success: function(result) {
               console.log("Transaction #2 sent!");
             }
@@ -422,13 +422,9 @@ function sweepKey() {
       $.ajax({
         async: true,
         type: "POST",
-       // url: API_DOMAIN + "q=pushtx",
-        //contentType: 'text',
-        //dataType: "text",
-        //data: tx_raw, //JSON.stringify({hex: tx_raw}),
-            url: "http://groestlsight.groestlcoin.org/api/tx/send",//+coinjs.apikey,
-            data: "rawtx="+tx_raw,
-            dataType: "json",
+        url: API_DOMAIN2 + "/api/tx/send",
+        data: "rawtx="+tx_raw,
+        dataType: "json",
         success: function(result) {
           console.log("Transaction sent!");
         },
