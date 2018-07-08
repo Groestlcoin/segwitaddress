@@ -4,7 +4,7 @@
     
 <head>
     <title>Groestlcoin SegWit Paper Wallet</title>
-    <meta name="description" content="Create Groestlcooin Segregated Witness (SegWit) Addresses in your browser that can be ran offline to create paper wallets or bulk addresses.">
+    <meta name="description" content="Create Groestlcoin Segregated Witness (SegWit) Addresses in your browser that can be ran offline to create paper wallets or bulk addresses.">
     <meta name="keywords" content="Groestlcoin, SegWit Paper, SegWit Address, P2WPKH generator, bech32, native segwit, P2WPKH wallet, javascript, pay to witness">
 
     <style>
@@ -169,15 +169,18 @@
     <script type="text/javascript" src="../js/qrcode.js"></script>
     <!-- Groestlcoin Hash -->
     <script type="text/javascript" src="../js/grs.js"></script>
+    <!-- Network specific methods -->
+    <script type="text/javascript" src="../js/network.js"></script>
     
 </head>
     
 <body>
-    <h1>Groestlcoin Bech32 Paper Wallet</h1>
+    <script type="text/javascript">document.write(headerHtml_bech32())</script>
+    
         
         <!-- introduction -->
         <br>   
-            <div class="well">Groestlcoin Segwitaddress is an <a href="https://github.com/Groestlcoin/segwitaddress"><span class="label label-primary">OPEN SOURCE</span></a> bitcoin paper wallet generator that utilizes Native Segregated Witness (SegWit) Pay To Witness Public Key Hash (P2WPKH) addresses. Segwitaddress.org uses the <a href="https://github.com/bitcoinjs/bitcoinjs-lib"><span class="label label-success">BitcoinJS</span></a> library.
+            <div class="well">Groestlcoin Segwit Paper Wallet is an <a href="https://github.com/Groestlcoin/segwitaddress"><span class="label label-primary">OPEN SOURCE</span></a> bitcoin paper wallet generator that utilizes Native Segregated Witness (SegWit) Pay To Witness Public Key Hash (P2WPKH) addresses. Groestlcoin Segwit Paper Wallet uses the <a href="https://github.com/bitcoinjs/bitcoinjs-lib"><span class="label label-success">BitcoinJS</span></a> library for Groestlcoin.
             <br>
             <br>
             All of the functions on this page can be ran offline, by <a href="https://github.com/Groestlcoin/segwitaddress/releases">saving this site</a> and running the index.html file, except for the sweep function which requires internet access to check the UTXOs and broadcast to the network.
@@ -268,7 +271,7 @@
     
     <!-- footer -->
     <a href="https://bitcoincore.org/en/segwit_adoption/"><span class="label-default"><span id="wit">SEG</span>WIT</span></a>
-    <a href="https://github.com/Groesltcoin/segwitaddress"><span class="label-primary">OPEN SOURCE</span></a>
+    <a href="https://github.com/Groestlcoin/segwitaddress"><span class="label-primary">OPEN SOURCE</span></a>
     <a href="https://github.com/bitcoinjs/bitcoinjs-lib"><span class="label-success">BITCOINJS</span></a>
  
  
@@ -415,7 +418,7 @@ function bulkAddress(){
     var keynum = document.getElementById("bulknum").value;
         if(keynum < 1001){
                 for(i=0; i < keynum; i++){
-                    var keys = buidl.getNewAddress();
+                    var keys = buidl.getNewAddress(isTestNet ? "testnet" : "");
                     var swaddress = keys.p2wpkh;
                     var pkey = keys.pk;
                     var visualnum = i +1;
@@ -436,7 +439,7 @@ $(document).ready( function() {
       $("#brainBtn").on('click', brainWalletCreate);
       $("#clearBulk").on('click', clearBulk);
     
-      $.ajax({
+      /*$.ajax({
         async: true,
         type: "GET",
         url: "https://bws.bitpay.com/bws/api/v2/feelevels",
@@ -445,7 +448,10 @@ $(document).ready( function() {
           var calcSat = satPerByte / 2;
           $("#satperbyte").val(calcSat.toFixed(0));
         }
-      });
+      });*/
+      var satPerByte = 10
+      var calcSat = satPerByte;
+      $("#satperbyte").val(calcSat.toFixed(0));
 });
      
   
