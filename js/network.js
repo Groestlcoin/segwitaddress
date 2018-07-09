@@ -21,7 +21,7 @@ function apiDomain() {
 }
 
 function apiDomain2() {
-    return !isTestNet ? 'https://groestlsight.groestlcoin.org' : 'https://groestlsight.groestlcoin.org';
+    return !isTestNet ? 'https://groestlsight.groestlcoin.org' : 'https://groestlsight-test.groestlcoin.org';
 }
 
 function explorerDomain() {
