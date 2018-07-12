@@ -6,7 +6,7 @@
     <title>Groestlcoin SegWit Paper Wallet</title>
     <meta name="description" content="Create Segregated Witness (SegWit) Addresses in your browser that can be ran offline to create paper wallets or bulk addresses.">
     <meta name="keywords" content="Groestlcoin, SegWit Paper, SegWit Address, P2WPKH generator, P2WPKH wallet, javascript, pay to witness">
-
+    <link rel="shortcut icon" href="favicon.ico">
     <style>
     body, html {
         padding: 12px;
@@ -244,7 +244,7 @@
             <br>
             
             <textarea id="inputdata" cols="100" rows="7"></textarea>
-            <input type="number" class="form-control input-lg" id="satperbyte"> <small>Miner Fee Satoshis Per Byte</small>
+            <input type="number" class="form-control input-lg" id="satperbyte"> <small>Miner Fee Gro's Per Byte</small>
             <br>
             <br>
             <button class="btn btn-success" id="sweepkey">TRANSFER ALL FUNDS</button>
@@ -719,16 +719,9 @@ $(document).ready( function() {
       $("#brainBtn").on('click', brainWalletCreate);
       $("#clearBulk").on('click', clearBulk);
       Buffer = bitcoin.script.compile([]).constructor;
-      $.ajax({
-        async: true,
-        type: "GET",
-        url: "https://bws.bitpay.com/bws/api/v2/feelevels",
-        success: function(result) {
-          var satPerByte = Math.ceil(result.filter(function(item){ return item.level == "superEconomy" })[0].feePerKb / 1000)
-          var calcSat = satPerByte / 2;
-          $("#satperbyte").val(calcSat.toFixed(0));
-        }
-      });
+      var satPerByte = 20;//Math.ceil(result.filter(function(item){ return item.level == "superEconomy" })[0].feePerKb / 1000)
+      var calcSat = satPerByte; /// 2;
+       $("#satperbyte").val(calcSat.toFixed(0));
 });
      
   

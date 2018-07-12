@@ -6,7 +6,7 @@
     <title>Groestlcoin SegWit Paper Wallet</title>
     <meta name="description" content="Create Groestlcoin Segregated Witness (SegWit) Addresses in your browser that can be ran offline to create paper wallets or bulk addresses.">
     <meta name="keywords" content="Groestlcoin, SegWit Paper, SegWit Address, P2WPKH generator, bech32, native segwit, P2WPKH wallet, javascript, pay to witness">
-
+    <link rel="shortcut icon" href="favicon.ico">
     <style>
     body, html {
         padding: 12px;
@@ -162,15 +162,15 @@
     </style>
     
     <!-- jQuery -->
-    <script src="../js/jquery-3.2.1.min.js"></script>
+    <script src="js/jquery-3.2.1.min.js"></script>
     <!-- buidl.js (bitcoinjs-lib wrapper) -->
-    <script src="buidl.js"></script>
+    <script src="bech32/buidl.js"></script>
 	<!-- QRCode library -->
-    <script type="text/javascript" src="../js/qrcode.js"></script>
+    <script type="text/javascript" src="js/qrcode.js"></script>
     <!-- Groestlcoin Hash -->
-    <script type="text/javascript" src="../js/grs.js"></script>
+    <script type="text/javascript" src="js/grs.js"></script>
     <!-- Network specific methods -->
-    <script type="text/javascript" src="../js/network.js"></script>
+    <script type="text/javascript" src="js/network.js"></script>
     
 </head>
     
@@ -180,7 +180,7 @@
         
         <!-- introduction -->
         <br>   
-            <div class="well">Groestlcoin Segwit Paper Wallet is an <a href="https://github.com/Groestlcoin/segwitaddress"><span class="label label-primary">OPEN SOURCE</span></a> bitcoin paper wallet generator that utilizes Native Segregated Witness (SegWit) Pay To Witness Public Key Hash (P2WPKH) addresses. Groestlcoin Segwit Paper Wallet uses the <a href="https://github.com/bitcoinjs/bitcoinjs-lib"><span class="label label-success">BitcoinJS</span></a> library for Groestlcoin.
+            <div class="well">Groestlcoin Segwit Paper Wallet is an <a href="https://github.com/Groestlcoin/segwitaddress"><span class="label label-primary">OPEN SOURCE</span></a> Groestlcoin paper wallet generator that utilizes Native Segregated Witness (SegWit) Pay To Witness Public Key Hash (P2WPKH) addresses. Groestlcoin Segwit Paper Wallet uses the <a href="https://github.com/bitcoinjs/bitcoinjs-lib"><span class="label label-success">BitcoinJS</span></a> library for Groestlcoin.
             <br>
             <br>
             All of the functions on this page can be ran offline, by <a href="https://github.com/Groestlcoin/segwitaddress/releases">saving this site</a> and running the index.html file, except for the sweep function which requires internet access to check the UTXOs and broadcast to the network.
@@ -224,7 +224,7 @@
         <br>    
         
         <!-- Sweep Key -->
-        
+
 
         <!-- Bulk Keys Generator -->
         <h2>Bulk Keys</h2>
@@ -427,12 +427,12 @@ function bulkAddress(){
         } else {
             alert("1000 is the max bro");
         }
-}  
+}
 
 function clearBulk(){
     $("#bulkkeys").html("");
 }  
-               
+
     
 $(document).ready( function() {
       $("#detailsBtn").on('click', details);
@@ -449,7 +449,7 @@ $(document).ready( function() {
           $("#satperbyte").val(calcSat.toFixed(0));
         }
       });*/
-      var satPerByte = 10
+      var satPerByte = 20
       var calcSat = satPerByte;
       $("#satperbyte").val(calcSat.toFixed(0));
 });
