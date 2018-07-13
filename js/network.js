@@ -9,7 +9,7 @@ function currentNetwork() {
 }
 
 function headerHtml() {
-    return '<h1>Groestlcoin SegWit Paper Wallet' + (isTestNet ? '<span style="color:red;"> (TestNet)</span>' : '') + '</h1>';
+    return '<h1>Groestlcoin P2SH Paper Wallet' + (isTestNet ? '<span style="color:red;"> (TestNet)</span>' : '') + '</h1>';
 }
 
 function headerHtml_bech32() {
